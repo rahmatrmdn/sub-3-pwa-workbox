@@ -1,4 +1,7 @@
 package-lock.json
 node_modules
-.idea
+dist/.idea
 dist
+firebase.json
+.firebaserc
+.firebase
