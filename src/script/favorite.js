@@ -7,7 +7,7 @@ export function favoriteCondition() {
 
     for (let button of favoriteButtons) {
 
-        button.addEventListener("click", function (event) {
+        button.addEventListener("click", () => {
             const team = {
                 id: button.getAttribute('data-team-id'),
                 name: button.getAttribute('data-team-name'),

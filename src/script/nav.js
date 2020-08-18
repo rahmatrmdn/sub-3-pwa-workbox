@@ -25,7 +25,7 @@ const nav = () => {
                     document.querySelectorAll(".sidenav a, .topnav a").forEach(function (elm) {
                         elm.addEventListener("click", function (event) {
                             // Tutup sidenav
-                            var sidenav = document.querySelector(".sidenav");
+                            const sidenav = document.querySelector(".sidenav");
                             M.Sidenav.getInstance(sidenav).close();
 
                             // Muat konten halaman yang dipanggil
