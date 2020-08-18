@@ -1,9 +1,9 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.3/workbox-sw.js');
+import {registerRoute} from 'workbox-routing';
+import {StaleWhileRevalidate, CacheFirst} from 'workbox-strategies';
+import {CacheableResponsePlugin} from 'workbox-cacheable-response';
+import {ExpirationPlugin} from 'workbox-expiration';
+import {precacheAndRoute} from 'workbox-precaching';
 
-if (workbox)
-    console.log(`Workbox berhasil dimuat`);
-else
-    console.log(`Workbox gagal dimuat`);
 
 const { assets } = global.serviceWorkerOption
 
@@ -14,36 +14,49 @@ const urlsToCache = assets.map(path => {
     }
 })
 
-workbox.precaching.precacheAndRoute(urlsToCache);
+precacheAndRoute(urlsToCache);
 
-workbox.routing.registerRoute(
+registerRoute(
     new RegExp('/pages/'),
-    workbox.strategies.staleWhileRevalidate()
+    new StaleWhileRevalidate()
 );
 
 // Menyimpan cache dari CSS Google Fonts
-workbox.routing.registerRoute(
+registerRoute(
     /^https:\/\/fonts\.googleapis\.com/,
-    workbox.strategies.staleWhileRevalidate({
+    new StaleWhileRevalidate({
         cacheName: 'google-fonts-stylesheets',
     })
 );
 
 // Menyimpan cache untuk file font selama 1 tahun
-workbox.routing.registerRoute(
+registerRoute(
     /^https:\/\/fonts\.gstatic\.com/,
-    workbox.strategies.cacheFirst({
+    new CacheFirst({
         cacheName: 'google-fonts-webfonts',
         plugins: [
-            new workbox.cacheableResponse.Plugin({
+            new CacheableResponsePlugin({
                 statuses: [0, 200],
             }),
-            new workbox.expiration.Plugin({
+            new ExpirationPlugin({
                 maxAgeSeconds: 60 * 60 * 24 * 365,
                 maxEntries: 30,
             }),
         ],
     })
+);
+
+registerRoute(
+    /\.(?:png|gif|jpg|jpeg|svg)$/,
+    new CacheFirst({
+        cacheName: 'images',
+        plugins: [
+            new ExpirationPlugin({
+                maxEntries: 60,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 hari
+            }),
+        ],
+    }),
 );
 
 // console.log(urlsToCache);
