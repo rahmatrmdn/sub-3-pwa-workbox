@@ -2,13 +2,21 @@ import {dbIsFavorite} from "../local/db-repo";
 import {favoriteCondition} from "../favorite";
 
 export function showStanding(data) {
+
+
     let standings = "";
     let standingElement = document.getElementById("homeStandings");
 
     data.standings[0].table.forEach(function (standing) {
+
+        let clubImage = standing.team.crestUrl;
+        if (clubImage !== null) {
+            clubImage = standing.team.crestUrl.replace(/^http:\/\//i, 'https://');
+        }
+
         standings += `
                 <tr>
-                    <td><img src="${standing.team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="30px" alt="badge"/></td>
+                    <td><img src="${clubImage}" width="30px" alt="badge"/></td>
                     <td>${standing.team.name}</td>
                     <td>${standing.won}</td>
                     <td>${standing.draw}</td>
