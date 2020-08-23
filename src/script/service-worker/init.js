@@ -14,7 +14,11 @@ const urlsToCache = assets.map(path => {
     }
 })
 
-precacheAndRoute(urlsToCache);
+precacheAndRoute(urlsToCache, {
+    // Ignore all URL parameters.
+    ignoreURLParametersMatching: [/.*/]
+});
+
 
 registerRoute(
     new RegExp('/pages/'),
